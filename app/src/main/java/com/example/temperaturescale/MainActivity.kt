@@ -9,12 +9,14 @@ import android.widget.TextView
 class MainActivity : AppCompatActivity() {
     private lateinit var celsiusTextView:TextView;
     private lateinit var fahrenheitTextView:TextView
+    private lateinit var messagedisplay:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         celsiusTextView = findViewById(R.id.celsiusTextView)
 
         fahrenheitTextView = findViewById(R.id.FahrenheitTextView)
+        messagedisplay = this.findViewById(R.id.messagedisplay)
 
         var celsiusSeekBar = findViewById<SeekBar>(R.id.celsiusseekBar)
 
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity() {
                     fahrenheitVal = ((celsiusVal * 9) / 5) + 32
                     updateTextViews(celsiusVal, fahrenheitVal)
                     fahrenheitSeekBar.progress = fahrenheitVal.toInt()
+                    if(celsiusVal < 20){
+                        messagedisplay.text = "it should be warmer"
+                    }else{
+                        messagedisplay.text = ""
+                    }
                 }
             }
 
@@ -49,10 +56,15 @@ class MainActivity : AppCompatActivity() {
         fahrenheitSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    fahrenheitVal = progress.toDouble()
-                    celsiusVal =((fahrenheitVal-32)*5)/9
-                    updateTextViews(celsiusVal,fahrenheitVal)
-                    celsiusSeekBar.progress = celsiusVal.toInt()
+                    if(progress<32){
+                        fahrenheitSeekBar.progress = 32
+                    }else{
+
+                        fahrenheitVal = progress.toDouble()
+                        celsiusVal =((fahrenheitVal-32)*5)/9
+                        updateTextViews(celsiusVal,fahrenheitVal)
+                        celsiusSeekBar.progress = celsiusVal.toInt()
+                    }
                 }
 
             }
